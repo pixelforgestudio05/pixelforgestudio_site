@@ -1,0 +1,440 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap');
+
+@import "tailwindcss";
+
+
+@theme {
+  /* =========================
+     PixelForge Brand Colors
+     ========================= */
+
+  --color-brand-dark: #14161A;
+  --color-brand-light: #FAF7F2;
+  --color-brand-amber: #E8590C;
+
+
+  /* =========================
+     PixelForge Typography
+     ========================= */
+
+  --font-heading: "Fraunces", serif;
+  --font-body: "Manrope", sans-serif;
+}
+
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    background-color: #14161A;
+    color: #FAF7F2;
+    font-family: "Manrope", sans-serif;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+}
+/* ================= SCROLLBAR ================= */
+
+html {
+  scrollbar-width: thin;
+  scrollbar-color: #E8590C #14161A;
+}
+
+/* Chrome, Edge, Safari */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #14161A;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #E8590C;
+  border-radius: 999px;
+  border: 2px solid #14161A;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #E8590C;
+}
+
+@keyframes whatsappFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+}
+section {
+  scroll-margin-top: 85px;
+}
+
+@media (min-width: 640px) {
+  section {
+    scroll-margin-top: 90px;
+  }
+}
+
+@media (min-width: 1024px) {
+  section {
+    scroll-margin-top: 85px;
+  }
+}
+
+/* Carousel */
+@keyframes portfolioScroll {
+  0% {
+    transform: translateX(0);
+  }
+
+  16.66% {
+    transform: translateX(0);
+  }
+
+  16.67% {
+    transform: translateX(-1);
+  }
+
+  33.33% {
+    transform: translateX(-1);
+  }
+
+  33.34% {
+    transform: translateX(-2);
+  }
+
+  50% {
+    transform: translateX(-2);
+  }
+
+  50.01% {
+    transform: translateX(-3);
+  }
+
+  66.66% {
+    transform: translateX(-3);
+  }
+
+  66.67% {
+    transform: translateX(-4);
+  }
+
+  83.33% {
+    transform: translateX(-4);
+  }
+
+  83.34% {
+    transform: translateX(-5);
+  }
+
+  100% {
+    transform: translateX(-5);
+  }
+}
+button,
+a,
+select {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+/* =========================================
+   PIXELFORGE CUSTOM CURSOR
+========================================= */
+
+@media (pointer: fine) {
+  html,
+  body,
+  a,
+  button,
+  input,
+  textarea,
+  select {
+    cursor: none !important;
+  }
+
+  /* -------------------------
+     MAIN DOT
+  ------------------------- */
+
+  .pf-cursor-dot {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 10002;
+
+    width: 9px;
+    height: 9px;
+
+    pointer-events: none;
+
+    border-radius: 50%;
+    background: #E8590C;
+
+    transform: translate(-50%, -50%);
+
+    box-shadow:
+      0 0 8px rgba(232, 89, 12, 0.9),
+      0 0 20px rgba(232, 89, 12, 0.45);
+
+    transition:
+      width 0.25s ease,
+      height 0.25s ease,
+      opacity 0.25s ease,
+      transform 0.15s ease;
+  }
+
+  .pf-cursor-dot.is-hover {
+    width: 6px;
+    height: 6px;
+  }
+
+  .pf-cursor-dot.is-click {
+    transform: translate(-50%, -50%) scale(0.65);
+  }
+
+  /* -------------------------
+     GLOW
+  ------------------------- */
+
+  .pf-cursor-glow {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 9997;
+
+    width: 70px;
+    height: 70px;
+
+    pointer-events: none;
+
+    border-radius: 50%;
+
+    background: rgba(232, 89, 12, 0.07);
+
+    filter: blur(12px);
+
+    transform: translate(-50%, -50%);
+
+    transition:
+      width 0.35s ease,
+      height 0.35s ease,
+      opacity 0.3s ease;
+  }
+
+  .pf-cursor-glow.is-hover {
+    width: 100px;
+    height: 100px;
+    background: rgba(232, 89, 12, 0.11);
+  }
+
+  /* -------------------------
+     OUTER RING
+  ------------------------- */
+
+  .pf-cursor-ring {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 10000;
+
+    width: 46px;
+    height: 46px;
+
+    pointer-events: none;
+
+    border: 1px solid rgba(232, 89, 12, 0.75);
+    border-radius: 50%;
+
+    transform: translate(-50%, -50%);
+
+    transition:
+      width 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+      height 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 0.3s ease,
+      background-color 0.3s ease,
+      box-shadow 0.3s ease,
+      opacity 0.25s ease;
+  }
+
+  /* Inner technical circle */
+
+  .pf-cursor-ring::before {
+    content: "";
+
+    position: absolute;
+    inset: 6px;
+
+    border: 1px dashed rgba(250, 247, 242, 0.2);
+
+    border-radius: 50%;
+  }
+
+  /* Small amber center ring */
+
+  .pf-cursor-ring::after {
+    content: "";
+
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    width: 4px;
+    height: 4px;
+
+    border-radius: 50%;
+
+    background: #E8590C;
+
+    transform: translate(-50%, -50%);
+
+    box-shadow: 0 0 8px rgba(232, 89, 12, 0.7);
+  }
+
+  /* -------------------------
+     FOUR TECHNICAL MARKS
+  ------------------------- */
+
+  .pf-cursor-line {
+    position: absolute;
+
+    width: 5px;
+    height: 5px;
+
+    border-radius: 50%;
+
+    background: #E8590C;
+
+    box-shadow: 0 0 7px rgba(232, 89, 12, 0.65);
+  }
+
+  .pf-line-top {
+    top: -3px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .pf-line-right {
+    right: -3px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .pf-line-bottom {
+    bottom: -3px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .pf-line-left {
+    left: -3px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  /* -------------------------
+     HOVER
+  ------------------------- */
+
+  .pf-cursor-ring.is-hover {
+    width: 70px;
+    height: 70px;
+
+    border-color: #E8590C;
+
+    background: rgba(232, 89, 12, 0.06);
+
+    box-shadow:
+      0 0 20px rgba(232, 89, 12, 0.15),
+      inset 0 0 18px rgba(232, 89, 12, 0.05);
+  }
+
+  /* -------------------------
+     LABEL
+  ------------------------- */
+
+  .pf-cursor-label {
+    position: fixed;
+    left: 0;
+    top: 0;
+
+    z-index: 10003;
+
+    width: 70px;
+    height: 70px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    pointer-events: none;
+
+    color: #FAF7F2;
+
+    font-family: "Manrope", sans-serif;
+    font-size: 8px;
+    font-weight: 800;
+
+    letter-spacing: 0.13em;
+
+    opacity: 0;
+
+    transform: translate(-50%, -50%);
+
+    transition:
+      opacity 0.2s ease,
+      transform 0.25s ease;
+  }
+
+  .pf-cursor-label.is-visible {
+    opacity: 1;
+  }
+
+  /* -------------------------
+     CLICK
+  ------------------------- */
+
+  .pf-cursor-ring.is-click {
+    width: 30px;
+    height: 30px;
+
+    background: rgba(232, 89, 12, 0.15);
+
+    border-color: #E8590C;
+  }
+
+  /* -------------------------
+     HIDDEN
+  ------------------------- */
+
+  .pf-cursor-dot.is-hidden,
+  .pf-cursor-ring.is-hidden,
+  .pf-cursor-glow.is-hidden,
+  .pf-cursor-label.is-hidden {
+    opacity: 0;
+  }
+}
+
+/* Touch / mobile */
+
+@media (pointer: coarse) {
+  .pf-cursor-dot,
+  .pf-cursor-ring,
+  .pf-cursor-glow,
+  .pf-cursor-label {
+    display: none !important;
+  }
+}
