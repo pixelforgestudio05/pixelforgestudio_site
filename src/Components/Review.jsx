@@ -7,7 +7,7 @@ import {
   FaCheck,
 } from "react-icons/fa";
 
-import { API_URL } from "../config/api";
+import { API_URL } from "../../Backend/src/config/api";
 
 const Review = () => {
   const [reviews, setReviews] = useState([]);

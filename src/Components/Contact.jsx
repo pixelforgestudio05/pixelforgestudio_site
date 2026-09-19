@@ -10,7 +10,7 @@ import {
 } from "react-icons/fa";
 
 import ContactBg from "../assets/contactbg.png";
-import { API_URL } from "../config/api";
+import { API_URL } from "../../Backend/src/config/api";
 
 const services = [
   "Web Development",
