@@ -6,7 +6,7 @@ import pool from "../config/db.js";
 
 export const getApprovedReviews = async (req, res) => {
   try {
-    const [reviews] = await pool.execute(
+    const result = await pool.query(
       `SELECT id, name, role, review, rating, status, created_at
        FROM reviews
        WHERE status = 'approved'
@@ -15,7 +15,7 @@ export const getApprovedReviews = async (req, res) => {
 
     res.json({
       success: true,
-      reviews,
+      reviews: result.rows,
     });
   } catch (error) {
     console.error("Get approved reviews error:", error);
@@ -55,17 +55,18 @@ export const submitReview = async (req, res) => {
       });
     }
 
-    const [result] = await pool.execute(
+    const result = await pool.query(
       `INSERT INTO reviews
       (name, role, review, rating, status)
-      VALUES (?, ?, ?, ?, 'pending')`,
+      VALUES ($1, $2, $3, $4, 'pending')
+      RETURNING id`,
       [name.trim(), role.trim(), review.trim(), numericRating],
     );
 
     res.status(201).json({
       success: true,
       message: "Review submitted successfully and is waiting for approval.",
-      id: result.insertId,
+      id: result.rows[0].id,
     });
   } catch (error) {
     console.error("Submit review error:", error);
@@ -83,7 +84,7 @@ export const submitReview = async (req, res) => {
 
 export const getAllReviews = async (req, res) => {
   try {
-    const [reviews] = await pool.execute(
+    const result = await pool.query(
       `SELECT id, name, role, review, rating, status, created_at
        FROM reviews
        ORDER BY created_at DESC`,
@@ -91,7 +92,7 @@ export const getAllReviews = async (req, res) => {
 
     res.json({
       success: true,
-      reviews,
+      reviews: result.rows,
     });
   } catch (error) {
     console.error("Get all reviews error:", error);
@@ -121,14 +122,14 @@ export const updateReviewStatus = async (req, res) => {
       });
     }
 
-    const [result] = await pool.execute(
+    const result = await pool.query(
       `UPDATE reviews
-       SET status = ?
-       WHERE id = ?`,
+       SET status = $1
+       WHERE id = $2`,
       [status, id],
     );
 
-    if (result.affectedRows === 0) {
+    if (result.rowCount === 0) {
       return res.status(404).json({
         success: false,
         message: "Review not found.",
@@ -157,13 +158,13 @@ export const deleteReview = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const [result] = await pool.execute(
+    const result = await pool.query(
       `DELETE FROM reviews
-       WHERE id = ?`,
+       WHERE id = $1`,
       [id],
     );
 
-    if (result.affectedRows === 0) {
+    if (result.rowCount === 0) {
       return res.status(404).json({
         success: false,
         message: "Review not found.",

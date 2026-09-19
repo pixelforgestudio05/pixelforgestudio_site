@@ -15,10 +15,11 @@ export const submitContact = async (req, res) => {
       });
     }
 
-    const [result] = await pool.execute(
+    const result = await pool.query(
       `INSERT INTO messages
       (name, email, phone, service, message)
-      VALUES (?, ?, ?, ?, ?)`,
+      VALUES ($1, $2, $3, $4, $5)
+      RETURNING id`,
       [
         name.trim(),
         email.trim(),
@@ -31,7 +32,7 @@ export const submitContact = async (req, res) => {
     res.status(201).json({
       success: true,
       message: "Your message has been received.",
-      id: result.insertId,
+      id: result.rows[0].id,
     });
   } catch (error) {
     console.error("Contact submission error:", error);
@@ -49,7 +50,7 @@ export const submitContact = async (req, res) => {
 
 export const getMessages = async (req, res) => {
   try {
-    const [messages] = await pool.execute(
+    const result = await pool.query(
       `SELECT id, name, email, phone, service, message, status, created_at
        FROM messages
        ORDER BY created_at DESC`,
@@ -57,7 +58,7 @@ export const getMessages = async (req, res) => {
 
     res.json({
       success: true,
-      messages,
+      messages: result.rows,
     });
   } catch (error) {
     console.error("Get messages error:", error);
@@ -87,14 +88,14 @@ export const updateMessageStatus = async (req, res) => {
       });
     }
 
-    const [result] = await pool.execute(
+    const result = await pool.query(
       `UPDATE messages
-       SET status = ?
-       WHERE id = ?`,
+       SET status = $1
+       WHERE id = $2`,
       [status, id],
     );
 
-    if (result.affectedRows === 0) {
+    if (result.rowCount === 0) {
       return res.status(404).json({
         success: false,
         message: "Message not found.",
@@ -123,13 +124,13 @@ export const deleteMessage = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const [result] = await pool.execute(
+    const result = await pool.query(
       `DELETE FROM messages
-       WHERE id = ?`,
+       WHERE id = $1`,
       [id],
     );
 
-    if (result.affectedRows === 0) {
+    if (result.rowCount === 0) {
       return res.status(404).json({
         success: false,
         message: "Message not found.",

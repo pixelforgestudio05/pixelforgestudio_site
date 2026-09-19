@@ -24,8 +24,7 @@ import {
 } from "react-icons/fi";
 
 import LogoIcon from "../assets/Black-Logo-Circle.png";
-
-const API_URL = "http://localhost:5000/api";
+import { API_URL } from "../config/api";
 
 /* =============================================================
    SAFE JSON RESPONSE PARSER

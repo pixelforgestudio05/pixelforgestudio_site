@@ -30,13 +30,15 @@ export const loginAdmin = async (req, res) => {
       });
     }
 
-    const [admins] = await pool.execute(
+    const result = await pool.query(
       `SELECT id, name, email, password
        FROM admins
-       WHERE email = ?
+       WHERE email = $1
        LIMIT 1`,
       [email.trim().toLowerCase()],
     );
+
+    const admins = result.rows;
 
     if (admins.length === 0) {
       return res.status(401).json({
@@ -102,12 +104,12 @@ export const registerAdmin = async (req, res) => {
 
     const normalizedEmail = email.trim().toLowerCase();
 
-    const [existingAdmins] = await pool.execute(
-      `SELECT id FROM admins WHERE email = ? LIMIT 1`,
+    const existing = await pool.query(
+      `SELECT id FROM admins WHERE email = $1 LIMIT 1`,
       [normalizedEmail],
     );
 
-    if (existingAdmins.length > 0) {
+    if (existing.rows.length > 0) {
       return res.status(409).json({
         success: false,
         message: "An admin with this email already exists.",
@@ -116,9 +118,10 @@ export const registerAdmin = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    const [result] = await pool.execute(
+    const result = await pool.query(
       `INSERT INTO admins (name, email, password)
-       VALUES (?, ?, ?)`,
+       VALUES ($1, $2, $3)
+       RETURNING id`,
       [name.trim(), normalizedEmail, hashedPassword],
     );
 
@@ -126,7 +129,7 @@ export const registerAdmin = async (req, res) => {
       success: true,
       message: "Admin account created successfully.",
       admin: {
-        id: result.insertId,
+        id: result.rows[0].id,
         name: name.trim(),
         email: normalizedEmail,
       },
@@ -147,13 +150,15 @@ export const registerAdmin = async (req, res) => {
 
 export const getMe = async (req, res) => {
   try {
-    const [admins] = await pool.execute(
+    const result = await pool.query(
       `SELECT id, name, email
        FROM admins
-       WHERE id = ?
+       WHERE id = $1
        LIMIT 1`,
       [req.admin.id],
     );
+
+    const admins = result.rows;
 
     if (admins.length === 0) {
       return res.status(404).json({

@@ -10,6 +10,7 @@ import {
 } from "react-icons/fa";
 
 import ContactBg from "../assets/contactbg.png";
+import { API_URL } from "../config/api";
 
 const services = [
   "Web Development",
@@ -102,7 +103,7 @@ const Contact = () => {
     setErrorMessage("");
 
     try {
-      const response = await fetch("http://localhost:5000/api/contact", {
+      const response = await fetch(`${API_URL}/contact`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
